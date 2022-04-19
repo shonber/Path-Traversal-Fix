@@ -9,38 +9,43 @@
 	<div class="row " >
 		<div class="span3"></div>
 		<div id="login" class="span6 well" style='background :white; border:1px silver solid;'>
-			<h4>This is just a test</h4>
-				<pre><?php
-				
-				function errorHandler(){
-					echo "";
-					header("Location: stage1.php");
-				}
-				
-				set_error_handler("errorHandler");
-				
-					if(isset($_GET["file"]))
-					{
-						//include($_GET["file"]);
-						
-						if (strpos($_GET["file"],"../") !== false){
-							header("Location: stage1.php");
-						}else{
-							try{
-								include($_GET["file"]);
-							}
-							catch (Exception $e){
-								echo $e->getMessage();
-							}
+		<h4>This is just a test</h4>
+			<pre>
+
+			<?php
+			/* ____Start of the Fix____ */
+
+			// Basic function to create a custom error handler
+			function errorHandler(){
+				echo "";
+				header("Location: stage1.php"); // This command will redirect to the default page.
+			}
+
+			// Setting the function as the error handler.
+			set_error_handler("errorHandler");
+
+				/* Checking if the parameter exists if it does we will continue to the condition.
+				* If the phrase  '../' is in the parameter we will redirect the user to the default page.
+				* else we will try to include the parameter in the page.
+				* if there is an error (such as file does not exists) we will redirect the user to the default page.
+				*/
+
+				if(isset($_GET["file"]))
+				{						
+					if (strpos($_GET["file"],"../") !== false){
+						header("Location: index.php");
+					}else{
+						try{
+							include($_GET["file"]);
+						}
+						catch (Exception $e){
+							echo $e->getMessage();
 						}
 					}
-				?>
-				</pre>
-				<hr/>
-				<p>
-					<b>Rules: </b><kbd>LFI: try to read xampp/passwords.txt file</kbd>
-				</p>
-			</form>
+				}
+			?>
+
+			</pre>
 		</div>
 	</div>
 </div>
@@ -49,7 +54,7 @@
 	var url_data = url.searchParams.get("file");
 	if (url_data === null)
 	{
-			window.location="stage1.php?file=test.txt";
+			window.location="index.php?file=test.txt";
 	}
 </script>
 </body>
